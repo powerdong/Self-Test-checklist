@@ -1,13 +1,13 @@
 ## 目录
 
-1. **[理解 ECMAScript 和 JavaScript 的关系](#ES&JS)**
-1. **[掌握 JavaScript 提供的全局对象、全局函数、全局属性](#global)**
-1. **[应用 map、reduce、filter 等高阶函数解决问题](#fn)**
+1. **[理解 ECMAScript 和 JavaScript 的关系](#理解-ecmascript-和-javascript-的关系)**
+1. **[掌握 JavaScript 提供的全局对象、全局函数、全局属性](#掌握-javascript-提供的全局对象全局函数全局属性)**
+1. **[应用 map、reduce、filter 等高阶函数解决问题](#应用-mapreducefilter-等高阶函数解决问题)**
 1. **[setInterval 需要注意的点，使用 settimeout 实现 setInterval](#)**
 1. **[JavaScript 提供的正则表达式 API、可以使用正则表达式解决常见问题](#)**
 1. **[JavaScript 异常处理的方式，统一的异常处理方案](#)**
 
-### <h3 id="ES&JS">理解 ECMAScript 和 JavaScript 的关系<h3>
+### 理解 ECMAScript 和 JavaScript 的关系
 
 - **Ecma International**
   - 一个制定技术标准的组织
@@ -35,7 +35,7 @@
 
 [:arrow_up:返回目录](#目录)
 
-### <h3 id="global">掌握 JavaScript 提供的全局对象、全局函数、全局属性<h3>
+### 掌握 JavaScript 提供的全局对象、全局函数、全局属性
 
 **JavaScript 全局对象**
 `全局属性和函数可用于所有内建的JavaScript对象。`
@@ -58,7 +58,7 @@
 
 [:arrow_up:返回目录](#目录)
 
-### <h3 id="fn">应用 map、reduce、filter 等高阶函数解决问题<h3>
+### 应用 map、reduce、filter 等高阶函数解决问题
 
 #### 高阶函数 Higher-order function
 
