@@ -2,7 +2,7 @@
 
 1. **[理解 ECMAScript 和 JavaScript 的关系](#ES&JS)**
 1. **[掌握 JavaScript 提供的全局对象、全局函数、全局属性](#global)**
-1. **[应用 map、reduce、filter 等高阶函数解决问题](#)**
+1. **[应用 map、reduce、filter 等高阶函数解决问题](#fn)**
 1. **[setInterval 需要注意的点，使用 settimeout 实现 setInterval](#)**
 1. **[JavaScript 提供的正则表达式 API、可以使用正则表达式解决常见问题](#)**
 1. **[JavaScript 异常处理的方式，统一的异常处理方案](#)**
@@ -37,19 +37,157 @@
 
 ### <h3 id="global">掌握 JavaScript 提供的全局对象、全局函数、全局属性<h3>
 
-**JavaScript全局对象**
-``全局属性和函数可用于所有内建的JavaScript对象。``
+**JavaScript 全局对象**
+`全局属性和函数可用于所有内建的JavaScript对象。`
 
 **全局对象的描述**
+
 > 1. 全局对象是预定义的对象，作为 JavaScript 的全局函数和全局属性的占位符。通过使用全局对象，可以访问所有其他所有预定义的对象、函数和属性。全局对象不是任何对象的属性，所以它没有名称。
 
-> 2. 在顶层 JavaScript 代码中，可以用关键字 this 引用全局对象。但通常不必用这种方式引用全局对象，因为全局对象是作用域链的头，这意味着所有非限定性的变量和函数名都会作为该对象的属性来查询。例如，当JavaScript 代码引用 parseInt() 函数时，它引用的是全局对象的 parseInt 属性。全局对象是作用域链的头，还意味着在顶层 JavaScript 代码中声明的所有变量都将成为全局对象的属性。
+> 2. 在顶层 JavaScript 代码中，可以用关键字 this 引用全局对象。但通常不必用这种方式引用全局对象，因为全局对象是作用域链的头，这意味着所有非限定性的变量和函数名都会作为该对象的属性来查询。例如，当 JavaScript 代码引用 parseInt() 函数时，它引用的是全局对象的 parseInt 属性。全局对象是作用域链的头，还意味着在顶层 JavaScript 代码中声明的所有变量都将成为全局对象的属性。
 
 > 3. 全局对象只是一个对象，而不是类。既没有构造函数，也无法实例化一个新的全局对象。
 
 > 4. 在 JavaScript 代码嵌入一个特殊环境中时，全局对象通常具有环境特定的属性。实际上，ECMAScript 标准没有规定全局对象的类型，JavaScript 的实现或嵌入的 JavaScript 都可以把任意类型的对象作为全局对象，只要该对象定义了这里列出的基本属性和函数。例如，在允许通过 LiveConnect 或相关的技术来脚本化 Java 的 JavaScript 实现中，全局对象被赋予了这里列出的 java 和 Package 属性以及 getClass() 方法。而在客户端 JavaScript 中，全局对象就是 Window 对象，表示允许 JavaScript 代码的 Web 浏览器窗口。
 
 #### 总结：
-1. 全局环境的this会指向全局对象window，此时this===window;
-1. 全局变量会挂载在window对象下，会成为window下的一个属性。
-1. 如果你没有使用严格模式并给一个未声明的变量赋值的话，JS会自动创建一个全局变量。
+
+1. 全局环境的 this 会指向全局对象 window，此时 this===window;
+1. 全局变量会挂载在 window 对象下，会成为 window 下的一个属性。
+1. 如果你没有使用严格模式并给一个未声明的变量赋值的话，JS 会自动创建一个全局变量。
+
+[:arrow_up:返回目录](#目录)
+
+### <h3 id="fn">应用 map、reduce、filter 等高阶函数解决问题<h3>
+
+#### 高阶函数 Higher-order function
+
+- 至少满足以下条件：
+  - 函数可以作为参数被传递
+  - 函数可以作为返回值被输出
+
+常见的高阶函数有：`Map`、`Reduce`、`Filter`、`Sort`;
+
+1. **Map**
+
+```javascript
+array.map(function(ele, index, arr) {}, thisValue); //浅克隆
+```
+
+> map()不会改变原数组
+
+> 用变量接收返回值，可以用做浅克隆
+
+---
+
+```javascript{.line-number}
+/**
+ * 深度克隆
+ * @param {*} Target 目标对象
+ * @param {*} Option 克隆源
+ */
+function deepClone(Target, Option) {
+  if (Option != null) {
+    for (var prop in Option) {
+      var src = Target[prop];
+      var copy = Option[prop];
+      if (copy && typeof copy == "object") {
+        if (Object.prototype.toString.call(copy) == "[object Array]") {
+          src = [];
+        } else {
+          src = {};
+        }
+        Target[prop] = deepClone(src, copy);
+      } else {
+        Target[prop] = copy;
+      }
+    }
+  }
+  return Target;
+}
+```
+
+1. **reduce**
+
+```javascript
+array.reduce(function(preValue, ele, index, arr), initialValue)
+
+//initialValue :传初始值;
+// 如果不传，第一次pre打印数值第一位，ele是第二位
+```
+
+> reduce()对于空数组是不会执行回调函数
+
+> 累加器
+> return preValue + ele;
+
+```javascript{.line-number}
+/**
+*底层实现
+/
+
+Array.prototype.Reduce = function(func,init){
+    var previous = init,
+        k = 0;
+    if(init === undefined){
+        previous = this[0];
+        k = 1; 
+    }
+    for(k; k<this.length; k++){
+        previous = func(previous, this[k], k);
+    }
+    return previous;
+}
+```
+
+1. **filter**
+
+```javascript
+array.filter(function(ele,index,arr){}, thisValue)
+```
+
+> filter()不会改变原始数组
+
+> 筛选出符合条件的项，组成新数组
+
+```javascript{.line-number}
+/**
+*底层实现
+/
+
+Array.prototype.Filter = function(func){
+    var arr = [];
+    for(var i = 0; i<this.length; i++){
+        if(func(this[i], i){
+            arr.push(this[i]);
+        };
+    }
+    return arr;
+}
+```
+
+1. **forEach**
+
+```javascript
+array.forEach(function(ele,index,arr){}, thisValue)
+```
+
+> 原数组不变，无返回值
+
+> map()与forEach()语法一致，能用forEach()做到的，map()同样可以，但是存在区别。
+
+- 区别：
+    - forEach()返回值undefined，不可以链式调用；
+    - map()返回一个新数组，原数组不会改变。
+
+```javascript{.line-number}
+/**
+*底层实现
+/
+
+Array.prototype.ForEach = function(func){
+    for(var i = 0; i<this.length; i++){
+        func(this[i], i){
+    }
+}
+```
