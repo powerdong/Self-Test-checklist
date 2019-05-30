@@ -3,9 +3,9 @@
 1. **[理解 ECMAScript 和 JavaScript 的关系](#理解-ecmascript-和-javascript-的关系)**
 1. **[掌握 JavaScript 提供的全局对象、全局函数、全局属性](#掌握-javascript-提供的全局对象全局函数全局属性)**
 1. **[应用 map、reduce、filter 等高阶函数解决问题](#应用-mapreducefilter-等高阶函数解决问题)**
-1. **[setInterval 需要注意的点，使用 settimeout 实现 setInterval](#)**
-1. **[JavaScript 提供的正则表达式 API、可以使用正则表达式解决常见问题](#)**
-1. **[JavaScript 异常处理的方式，统一的异常处理方案](#)**
+1. **[setInterval 需要注意的点，使用 settimeout 实现 setInterval](#setinterval-需要注意的点使用-settimeout-实现-setinterval)**
+1. **[JavaScript 提供的正则表达式 API、可以使用正则表达式解决常见问题](#javascript-提供的正则表达式-api可以使用正则表达式解决常见问题)**
+1. **[JavaScript 异常处理的方式，统一的异常处理方案](#javascript-异常处理的方式统一的异常处理方案)**
 
 ### 理解 ECMAScript 和 JavaScript 的关系
 
@@ -191,3 +191,100 @@ Array.prototype.ForEach = function(func){
     }
 }
 ```
+[:arrow_up:返回目录](#目录)
+
+### setInterval 需要注意的点，使用 settimeout 实现 setInterval
+
+#### 精准问题
+setTimeout的问题在于它并不是精准的，例如使用setTimeout设定一个任务在10ms后执行，但是在9ms后，有一个任务占用了5ms的cpu时间片，再次轮到定时器执行时，时间已经过期了4ms。
+setInterval存在两个问题：
+  1. 时间间隔可能会跳过
+  1. 时间间隔可能小于定时器设定的时间
+
+#### 需要注意的点
+
+- setTimeout有最小时间间隔限制，HTML5标准为4ms，小于4ms按照4ms处理，但是每个浏览器实现的最小间隔都不同
+- 因为JS引擎只有一个线程，所以他将会强制异步事件排队执行
+- 如果setInterval的回调执行时间长于指定的延迟，setInterval将无间隔的一个接一个执行
+- this的指向问题可以通过bind函数，定义变量，箭头函数的方式来解决
+
+#### 区别
+
+setTimeout含义是定时器，到达一定的时间触发一次，但是setInterval含义是计时器，到达一定时间触发一次，并且会持续触发
+
+#### 相互之间的转换
+
+```javascript{.line-numbers}
+function run(){
+  setTimeout(function(){
+    run();
+  },1000);
+}
+
+setInterval(function(){
+  run();
+},1000);
+```
+[:arrow_up:返回目录](#目录)
+
+### JavaScript 提供的正则表达式 API、可以使用正则表达式解决常见问题
+
+详情请点击[正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions "点击查看")
+
+[:arrow_up:返回目录](#目录)
+
+### JavaScript 异常处理的方式，统一的异常处理方案
+
+详情请点击[异常处理的方式](https://segmentfault.com/a/1190000011481099 "点击查看")
+
+由于JavaScript引擎是单线程的，因此一旦遇到异常，JavaScript引擎通常会停止执行，阻塞后续代码并抛出一个异常信息，因此对于可预见的异常，我们应该捕捉并正确展示给用户或开发者。
+
+#### Error对象
+
+``throw``和``Promise.reject()``可以抛出字符串类型的异常，而且可以抛出一个``Error``对象类型的异常。
+一个``Error``对象类型的异常不仅包含一个异常信息，同时也包含一个追溯栈，这样你就可以很容易通过追溯栈找到代码出错的行数了。
+
+```javascript{.line-numbers}
+//创建自己的异常构造函数
+function MyError(message){
+  var instance = new Error(message);
+  instance.name = 'MyError';
+  Object.setPrototypeOf(instance, Object.getPrototypeOf(this));
+  return instance;
+}
+
+MyError.prototype = Object.create(Error.prototype,{
+  constructor:{
+    value:MyError,
+    enumerable:false,
+    writable:true,
+    configurable:true
+  }
+});
+
+if(Object.setPrototypeOf) {
+  Object.setPrototypeOf(MyError,Error);
+}else{
+  MyError.__proto__ = Error;
+}
+
+export default MyError;
+```
+#### Try / Catch
+
+``try/catch`` 主要用于捕捉异常。``try/catch``语句包含了一个``try``块，和至少有一个``catch``块或者一个``finally``块。
+
+``try``块中放入可能产生异常的语句或函数
+
+``catch``块中包含要执行的语句，当``try``块中抛出异常时，``catch``块会捕捉到这个异常信息，并执行``catch``块中的代码，如果``try``块中没有异常抛出，这``catch``块将会跳过。
+
+``finally``块在``try``块和``catch``块之后执行。无论是否有异常抛出或者是否被捕获它总是执行。当在``finally``块中抛出异常信息时会覆盖掉``try``块中的异常信息。
+
+
+#### 统一异常处理
+
+代码中抛出的异常，一种是要展示给用户，一种是展示给开发者。
+
+对于展示给用户的异常，一般使用``alert``或``toast``，对于展示给开发者的异常，一般输出到控制台。
+
+[:arrow_up:返回目录](#目录)
