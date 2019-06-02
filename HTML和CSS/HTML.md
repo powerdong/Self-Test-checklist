@@ -2,9 +2,9 @@
 
 1. **[从规范的角度理解HTML，从分类和语义的角度使用标签](#从规范的角度理解HTML从分类和语义的角度使用标签)**
 1. **[常用页面标签的默认样式、自带属性、不同浏览器的差异、处理浏览器兼容问题的方式](#常用页面标签的默认样式自带属性不同浏览器的差异处理浏览器兼容问题的方式)**
-1. **[元信息类标签(head、title、meta)的使用目的和配置方法](#)**
-1. **[HTML5离线缓存原理](#)**
-1. **[可以使用Canvas API、SVG等绘制高性能的动画](#)**
+1. **[元信息类标签(head、title、meta)的使用目的和配置方法](#元信息类标签headtitlemeta的使用目的和配置方法)**
+1. **[HTML5离线缓存原理](#html5离线缓存原理)**
+1. **[可以使用Canvas API、SVG等绘制高性能的动画](#可以使用canvas-apisvg等绘制高性能的动画)**
 
 
 ### 从规范的角度理解HTML，从分类和语义的角度使用标签
@@ -111,8 +111,96 @@ mark元素通常是表现跨越不同的上下文种的相关文本。
 
 [浏览器默认样式对照表](http://developer.doyoe.com/default-style/)
 
+[:arrow_up:返回目录](#目录)
+
 
 ### 元信息类标签(head、title、meta)的使用目的和配置方法
+
+#### Head中的全局属性
+
+##### base
+
+base标签指定了一个url地址作为基准，那么当前文档中的所有超链接都遵循这一规则，在a中设置访问目标的相对地址，浏览器会自动解析出一个完成的链接地址，若a中的href为空，浏览器也会根据base所给的url进行访问。
+**注意:**base标签需放在包含url地址的语句前面。
+```html
+<head>
+    <base href="https://www.baidu.com/" target="_blank">
+</head>
+```
+
+##### link
+
+link标签:用于引入外部文档，常用到引用css样式或icon图标
+其中:rel属性是link标签的核心
+注意:在HTML中，``<link>``标签没有结束标签
+在XHTML中，``<link>``标签必须被正确的关闭
+
+**charset属性规定被链接文档的字符编码方式**
+**href属性规定被链接文档的位置(URL)**
+
+```html
+<head>
+    <link href="index.css" rel="stylesheet" type="text/css" />
+</head>
+```
+
+**media属性规定被链接文档将显示在什么设备上**
+
+media属性有:
+ - screen 
+    - 计算机屏幕(默认)
+ - tty
+    - 电传打字机以及类似的使用等宽字符网格的媒介。
+ - tv
+    - 电视机类型设备（低分辨率、有限的滚屏能力）。
+ - projection
+    - 放映机
+ - handheld
+    - 手持设备(小屏幕、有限带宽)
+ - print
+    - 打印预览模式/打印页面
+ - braille
+    - 盲人点字法反馈设备
+ - aural
+    - 语音合成器
+ - all
+    - 适用于所有设备
+
+**rel 属性规定当前文档与被链接文档之间的关系**
+
+只有rel属性的"stylesheet"值得到了所有浏览器的支持。其他值只得到了部分地支持
+
+##### title
+
+浏览器会议特殊的方式来使用标题，当把文档加入链接列表或收藏夹时，文档标题将成为该链接的默认名称
+``<title>``标签是``<head>``标签中唯一要求包含的东西。
+
+**1. dir**
+属性为rtl和ltr规定元素中内容的文本方向-正向和反向
+**2. lang**
+规定元素中内容的语言代码
+**3. xml:lang**
+规定XHTML文档中元素内容的语言代码
+
+#### meta
+
+主要用于描述网页，与之对应的属性值为content，content中的内容主要是便于搜索引擎机器人查找信息和分类信息用的
+
+```html
+<meta name="参数" content="具体的参数值">
+```
+
+1. keywords 关键字
+1. description 网站内容描述
+1. robots 机器人向导(content的参数值有all，none，index，noindex，follow，nofollow)
+1. author 作者
+1. renderer 渲染模式
+1. viewport(视图模式)【对手机端而言很重要可把content="width-device=width"，则宽度为使用手机的宽度】
+1. http-equiv属性【http-equiv顾名思义，相当于http的文件头作用，它可以向浏览器传回一些有用的信息，以帮助正确和精确地显示网页内容，与之对应的属性值为content，content中的内容其实就是各个参数的变量值。】
+
+[:arrow_up:返回目录](#目录)
+
+
 ### HTML5离线缓存原理
 ### 可以使用Canvas API、SVG等绘制高性能的动画
 
