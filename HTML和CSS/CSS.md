@@ -336,6 +336,221 @@ float
 
 ### 水平垂直居中的方案、可以实现 6 种以上并对比它们的优缺点
 
+#### 行内元素水平、垂直居中
+
+- 方案一:表格布局(不设置居中元素宽高)
+
+```CSS
+使用
+display:table;
+display:table-cell;
+vertical-align:middle;
+```
+
+```HTML
+ <!--html代码如下：-->
+  <div class="panel-body line-align-center-one-content">
+    <div class="line-align-center-one">
+       <span class="mark-item">
+          这里是测试的内容 Lorem ipsum dolor sit amet, consectetur adipisicing elite. Blate larum nibs unde vel. Ab accusantium distinctio ex ipsa necessitatibus. Dolorum facere impedit laudantium magni minima molestiae, nam quidem soluta veniam.
+       </span>
+    </div>
+  </div>
+```
+
+```CSS
+ /*css代码段*/
+ .line-align-center-one-content{
+   display: table;
+   width: 100%;
+ }
+ .line-align-center-one{
+   height: 400px;
+   display: table-cell;
+   vertical-align: middle;
+   border: 1px solid #e4393c;
+   text-align: center;
+ }
+ .mark-item{
+   background: #ccc;
+   color: #fff;
+ }
+```
+
+- 方案二:使用绝对定位+位移(不设置元素宽高)
+
+```HTML
+<!--html代码段如下-->
+ <div class="line-align-center-two">
+    <span class="mark-two">
+       这里是一个行内元素 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam exercitationem pariatur recusandae voluptate. Amet, animi architecto commodi cumque distinctio, dolorum eaque laborum modi molestiae mollitia nesciunt perferendis rem tenetur voluptate!
+    </span>
+ </div>
+```
+
+```CSS
+  /*css代码段如下*/
+  .line-align-center-two{
+    position: relative;
+    height: 400px;
+    border: 1px solid #e4393c;
+  }
+  .mark-two{
+    background: #ccc;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) ;
+  }
+```
+- 方案三:使用相对位移+位移+text-align:center(不设置居中元素宽高)
+
+```HTML
+ <-- html代码段如下-->
+ <div class="line-align-center-three">
+    <span class="mark-three">
+       这里是一个行内元素
+    </span>
+ </div>
+```
+
+```CSS
+  /*css代码段如下*/
+  .line-align-center-three{
+    height: 400px;
+    border: 1px solid #e4393c;
+    text-align: center;
+  }
+  .mark-three{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%) ;
+    background: #ccc;
+    color: #fff;
+  }
+```
+- 方案四:使用flex布局(不设置居中元素宽高)
+
+```HTML
+  <!--html代码-->
+  <div class="line-align-center-four">
+    <span class="mark-four">
+      这里是一个行内元素 lorem
+    </span>
+  </div>
+```
+
+```CSS
+  .line-align-center-four{
+    display:flex;/*Flex布局*/
+    justify-content: center;/*指定水平居中*/
+    align-items:center;/*指定垂直居中*/
+    height: 400px;
+    border: 1px solid #e4393c;
+  }
+  .mark-four{
+    background: #ccc;
+    color: #fff;
+  }
+```
+
+- 方案五:使用伪类(不设置居中元素宽高)
+
+```HTML
+  <!--html代码如下-->
+  <div class="line-align-center-five">
+    <span class="mark-five">
+        这里是一个行内元素 Lorem
+    </span>
+  </div>
+```
+
+```CSS
+  /*css代码如下*/
+  .line-align-center-five {
+    height: 400px;
+    border: 1px solid #e4393c;
+    text-align: center;/*水平居中*/
+    font-size: 0;/*这一个很重要*/
+  }
+  .line-align-center-five:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+  .mark-five {
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    background: #ccc;
+    color: #fff;
+    line-height: 26px;
+  }
+```
+#### 块级元素,水平、垂直居中
+
+块级元素的居中同样可以使用上述的行为元素的居中方案
+
+**通用方案**
+
+- 在已知容器和居中元素的宽高情况下，可以使用margin来调节元素居中
+```HTML
+<!--html如下-->
+<div class="common-item">
+  <div class="common-one">
+    这里是内容区域，宽高100
+  </div>
+</div>
+```
+
+```CSS
+ /*css代码如下：*/
+ .common-item{
+   height: 400px;
+   border: 1px solid #e4393c;
+ }
+ .common-one{
+   width: 100px;
+   height: 100px;
+   border:1px solid blue;
+   margin: 150px auto 0;
+ 
+ }
+```
+
+- 在已知居中元素的宽高尺寸的情况下，可以使用绝对定位或相对定位+margin负值实现
+
+```HTML
+ <div class="common-item-two">
+   <div class="common-two">
+     这里是内容区域，宽高100
+   </div>
+ </div>
+```
+
+```CSS
+  .common-item-two{
+    height: 400px;
+    border: 1px solid #e4393c;
+    position: relative;
+  }
+  .common-two{
+    width: 100px;
+    height: 100px;
+    border:1px solid blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+  }
+```
+
+
+
+
 [:arrow_up:返回目录](#目录)
 
 ### BFC 实现原理,可以解决的问题,如何创建 BFC
