@@ -548,16 +548,113 @@ vertical-align:middle;
   }
 ```
 
-
-
-
 [:arrow_up:返回目录](#目录)
 
 ### BFC 实现原理,可以解决的问题,如何创建 BFC
 
+#### BFC 的定义
+
+BFC全称为block formatting context，中文为“块级格式化上下文”。
+相对应的还有IFC，也就是inline formatting context，中文为“内联格式化上下”。
+不过IFC作用和影响比较隐晦，我们就不介绍了，我们把学习重心放在BFC上。
+
+如果一个元素具有BFC，内部子元素再怎么翻江倒海、翻云覆雨，都不会影响外面的元素。所以BFC是不可能发生margin重叠的，因为margin重叠是会影响外面的元素的;BFC元素也可以用来清除浮动的影响，因为如果不清除，子元素浮动则父元素高度塌陷，必然会影响后面元素的布局和定位。
+
+那什么时候会触发BFC呢？常见的情况如下:
+```
+ ● <html>根元素
+ ● float的值不为none
+ ● overflow的值为auto、scroll 或 hidden
+ ● display的值为table-cell、table-caption 和 inline-block 中的任何一个
+ ● position的值不为relative 和 static
+```
+
+#### BFC的应用场景
+
+- 防止margin重叠（塌陷）
+- 清除内部浮动
+- 自适应多栏布局
+```html
+<!--两栏布局-->
+<style>
+    body {
+        width: 300px;
+        position: relative;
+    }
+ 
+    .aside {
+        width: 100px;
+        height: 150px;
+        float: left;
+        background: #f66;
+    }
+ 
+    .main {
+        height: 200px;
+        background: #fcc;
+        overflow:hidden;
+    }
+</style>
+<body>
+    <div class="aside"></div>
+    <div class="main"></div>
+</body>
+```
+
+```html
+ <style> 
+    html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+    .left{
+      background:pink;
+      float: left;
+      width:180px;
+    }
+    .center{
+      background:lightyellow;
+      overflow:hidden;
+      
+    }
+    .right{
+      background: lightblue;
+      width:180px;
+      float:right;
+    }
+  </style> 
+  <div class="container">
+    <div class="left"></div>
+    <div class="right"></div>
+    <div class="center"></div>
+  </div>
+```
+
+BFC的特性最重要的用途其实不是去margin重叠或者是清除float影响，而是实现更健壮、更智能的自适应布局。
+
+#### 创建BFC
+
+- **float:left**
+  - 浮动元素本身BFC化
+  - 然而浮动元素有破坏性和包裹性，失去了元素本身的流体自适应性，因此，无法用来实现自动填满容器的自适应布局
+  - 其兼容性良好，上手简单
+- **position:absolute**
+  - 脱离文档流有些严重，过于清高，和非定位元素很难玩到一块去
+- **overflow:hidden**(这个超棒)
+  - 不像浮动和绝对定位，玩的有点过，其本身还是一个很普通的元素
+  - 块状元素的流体特性保存得相当完好
+  - overflow:hidden的BFC特性从IE7浏览器开始就支持，兼容性也不错
+  - 唯一的问题就是容器盒子外的元素可能会被隐藏掉
+- **display:inline-block**
+  - 会让元素尺寸包裹收缩
+  - 在IE6和IE7浏览器下，block水平的元素设置display:inline-block元素还是block水平
+  - 于是，对于IE6和IE7得到一个比overflow:hidden更强大的声明
+- **display:table-cell**
+  - 其让元素表现得像单元格一样，IE8及以上版本浏览器才支持
+  - 它会跟随内部元素的宽度显示
+
 [:arrow_up:返回目录](#目录)
 
 ### 可使用 CSS 函数复用代码,实现特殊效果
+
+
 
 [:arrow_up:返回目录](#目录)
 
